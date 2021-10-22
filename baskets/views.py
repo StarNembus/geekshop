@@ -1,10 +1,14 @@
 from django.shortcuts import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required  # для декоратора
 
 from products.models import Product
 from baskets.models import Basket
 
 
 # при нажатии отправить в корзину
+@login_required  # добавление логики для функции basket_add (в части работы с неавторизованным пользователем))
+# Декоратор для представлений, который проверяет, что пользователь вошел в систему, перенаправляя
+# при необходимости, на страницу авторизации.
 def basket_add(request, product_id):
     product = Product.objects.get(id=product_id)  # товар, который добавляем в корзину
     baskets = Basket.objects.filter(user=request.user, product=product)  # добавлен ли товар в корзину для данного user
@@ -20,6 +24,7 @@ def basket_add(request, product_id):
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
+@login_required
 def basket_remove(request, id):
     basket = Basket.objects.get(id=id)
     basket.delete()

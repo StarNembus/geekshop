@@ -134,3 +134,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User' # базовая модель для работы с пользователем (название приложения.название модели)
+
+LOGIN_URL = '/users/login/'  # использует декоратор @login_required
