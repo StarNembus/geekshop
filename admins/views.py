@@ -53,5 +53,8 @@ def admin_users_update(request, id):
 
 
 # delete (обработчик действия)
-def admin_users_delete(request):
-    pass
+def admin_users_delete(request, id):
+    user = User.objects.get(id=id)
+    user.safe_delete()  # заблокировать
+    return HttpResponseRedirect(reverse('admins:admin_users'))
+
