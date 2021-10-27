@@ -3,8 +3,10 @@ from django.urls import reverse
 from users.models import User
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm
 from django.shortcuts import render, HttpResponseRedirect
+from django.contrib.auth.decorators import user_passes_test
 
 
+@user_passes_test(lambda u: u.is_staff)  # ограничение для входа в админку
 def index(request):
     context = {'title': 'GeekShop - Админ Панель'}
     return render(request, 'admins/index.html', context)
@@ -13,6 +15,7 @@ def index(request):
 # CRUD
 
 # create
+@user_passes_test(lambda u: u.is_staff)
 def admin_users_create(request):
     if request.method == 'POST':
         form = UserAdminRegistrationForm(data=request.POST, files=request.FILES)
@@ -27,6 +30,7 @@ def admin_users_create(request):
 
 
 # read
+@user_passes_test(lambda u: u.is_staff)
 def admin_users(request):
     context = {
         'title': 'GeekShop - Пользователи',
@@ -36,6 +40,7 @@ def admin_users(request):
 
 
 # update
+@user_passes_test(lambda u: u.is_staff)
 def admin_users_update(request, id):
     selected_user = User.objects.get(id=id)
     if request.method == 'POST':
@@ -53,6 +58,7 @@ def admin_users_update(request, id):
 
 
 # delete (обработчик действия)
+@user_passes_test(lambda u: u.is_staff)
 def admin_users_delete(request, id):
     user = User.objects.get(id=id)
     user.safe_delete()  # заблокировать
