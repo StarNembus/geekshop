@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse
 from users.models import User
+from products.models import ProductCategory
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test
@@ -63,4 +64,14 @@ def admin_users_delete(request, id):
     user = User.objects.get(id=id)
     user.safe_delete()  # заблокировать
     return HttpResponseRedirect(reverse('admins:admin_users'))
+
+
+def admin_products_category(request):
+    category = ProductCategory.objects.all(),
+    context = {
+        'title': 'GeekShop - Category',
+        'category': category,
+    }
+    return render(request, 'admins/admin_products_category.html', context)
+
 
