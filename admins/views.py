@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from users.models import User
 from products.models import ProductCategory
-from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm
+from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test
 
@@ -67,7 +67,7 @@ def admin_users_delete(request, id):
 
 
 def admin_products_category(request):
-    category = ProductCategory.objects.all(),
+    category = ProductCategory.objects.all()
     context = {
         'title': 'GeekShop - Category',
         'category': category,

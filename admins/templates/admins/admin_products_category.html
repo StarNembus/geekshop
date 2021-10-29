@@ -18,13 +18,7 @@
                                     <th>Описание</th>
                                 </tr>
                                 </thead>
-                                <tfoot>
                                 <tr>
-                                    <th>Категория</th>
-                                    <th>Описание</th>
-                                </tr>
-                                </tfoot>
-                                <tbody>
                                 <tbody>
                                 {% for category in category %}
                                     <tr>
@@ -32,7 +26,6 @@
                                             <a href="{% url 'admins:admin_products_category'%}" style="color: dodgerblue">{{ category }}
                                             </a>
                                         </td>
-                                        <td>{{ category.name }}</td>
                                         <td>{{ category.description }}</td>
                                 {% endfor %}
                                 </tbody>
