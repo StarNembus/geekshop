@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
 from users.models import User
 from products.models import ProductCategory
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory
@@ -16,21 +17,26 @@ def index(request):
 
 # CRUD
 # create
+class UserCreateView(CreateView):
+    model = User
+    template_name = 'admins/admin-users-create.html'
+    form_class = UserAdminRegistrationForm
+    success_url = reverse_lazy('admins:admin_users')
 
 
 # create
-@user_passes_test(lambda u: u.is_staff)
-def admin_users_create(request):
-    if request.method == 'POST':
-        form = UserAdminRegistrationForm(data=request.POST, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admins:admin_users'))
-    else:
-        form = UserAdminRegistrationForm()
-
-    context = {'title': 'GeekShop - Создание пользователей', 'form': form}
-    return render(request, 'admins/admin-users-create.html', context)
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_users_create(request):
+#     if request.method == 'POST':
+#         form = UserAdminRegistrationForm(data=request.POST, files=request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(reverse('admins:admin_users'))
+#     else:
+#         form = UserAdminRegistrationForm()
+#
+#     context = {'title': 'GeekShop - Создание пользователей', 'form': form}
+#     return render(request, 'admins/admin-users-create.html', context)
 
 
 # read
