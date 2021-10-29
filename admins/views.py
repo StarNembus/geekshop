@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.generic.list import ListView
 from users.models import User
 from products.models import ProductCategory
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory
@@ -14,6 +15,8 @@ def index(request):
 
 
 # CRUD
+# create
+
 
 # create
 @user_passes_test(lambda u: u.is_staff)
@@ -31,13 +34,19 @@ def admin_users_create(request):
 
 
 # read
-@user_passes_test(lambda u: u.is_staff)
-def admin_users(request):
-    context = {
-        'title': 'GeekShop - Пользователи',
-        'users': User.objects.all(),
-    }
-    return render(request, 'admins/admin-users-read.html', context)
+class UserListView(ListView):  # User - модель от которой наследуется, ListView - класс от которого наследуется
+    model = User
+    template_name = 'admins/admin-users-read.html'
+
+
+# # read
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_users(request):
+#     context = {
+#         'title': 'GeekShop - Пользователи',
+#         'users': User.objects.all(),
+#     }
+#     return render(request, 'admins/admin-users-read.html', context)
 
 
 # update
@@ -73,5 +82,3 @@ def admin_products_category(request):
         'category': category,
     }
     return render(request, 'admins/admin_products_category.html', context)
-
-
