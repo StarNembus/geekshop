@@ -1,6 +1,6 @@
 from django.urls import path
 
-from admins.views import index, UserCreateView, UserListView, admin_users_update, admin_users_delete,\
+from admins.views import index, UserCreateView, UserListView, UserUpdateView, admin_users_delete,\
     admin_products_category
 
 
@@ -10,7 +10,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('users/', UserListView.as_view(), name='admin_users'),
     path('users-create/', UserCreateView.as_view(), name='admin_users_create'),
-    path('users-update/<int:id>/', admin_users_update, name='admin_users_update'),
+    path('users-update/<int:pk>/', UserUpdateView.as_view(), name='admin_users_update'),  # для классов вместо id pk
     path('users-delete/<int:id>/', admin_users_delete, name='admin_users_delete'),
     path('admin_products_category/', admin_products_category, name='admin_products_category')
 

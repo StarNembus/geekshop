@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from users.models import User
 from products.models import ProductCategory
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory
@@ -56,21 +56,30 @@ class UserListView(ListView):  # User - модель от которой нас�
 
 
 # update
-@user_passes_test(lambda u: u.is_staff)
-def admin_users_update(request, id):
-    selected_user = User.objects.get(id=id)
-    if request.method == 'POST':
-        form = UserAdminProfileForm(instance=selected_user, files=request.FILES, data=request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admins:admin_users'))
-    else:
-        form = UserAdminProfileForm(instance=selected_user)
-    context = {'title': 'GeekShop - Обновление пользователя',
-               'form': form,
-               'selected_user': selected_user,
-               }
-    return render(request, 'admins/admin-users-update-delete.html', context)
+
+class UserUpdateView(UpdateView):
+    model = User
+    template_name = 'admins/admin-users-update-delete.html'
+    form_class = UserAdminProfileForm
+    success_url = reverse_lazy('admins:admin_users')
+
+
+# update
+# @user_passes_test(lambda u: u.is_staff)
+# def admin_users_update(request, id):
+#     selected_user = User.objects.get(id=id)
+#     if request.method == 'POST':
+#         form = UserAdminProfileForm(instance=selected_user, files=request.FILES, data=request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(reverse('admins:admin_users'))
+#     else:
+#         form = UserAdminProfileForm(instance=selected_user)
+#     context = {'title': 'GeekShop - Обновление пользователя',
+#                'form': form,
+#                'selected_user': selected_user,
+#                }
+#     return render(request, 'admins/admin-users-update-delete.html', context)
 
 
 # delete (обработчик действия)
