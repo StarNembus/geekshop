@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from users.models import User
@@ -44,6 +45,10 @@ class UserListView(ListView):  # User - модель от которой нас�
     model = User
     template_name = 'admins/admin-users-read.html'
 
+    @method_decorator(user_passes_test(lambda u: u.is_staff))
+    def dispatch(self, request, *args, **kwargs):
+        return super(UserListView, self).dispatch(request, *args, **kwargs)
+
 
 # # read
 # @user_passes_test(lambda u: u.is_staff)
@@ -62,6 +67,11 @@ class UserUpdateView(UpdateView):
     template_name = 'admins/admin-users-update-delete.html'
     form_class = UserAdminProfileForm
     success_url = reverse_lazy('admins:admin_users')
+
+    def get_context_data(self, **kwargs):
+        context = super(UserUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Админ-панель - Редакирование пользователя'
+        return context
 
 
 # update
@@ -90,7 +100,11 @@ class UserDeleteView(DeleteView):
 
 
 
-
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.safe_delete()
+        return HttpResponseRedirect(success_url)
 
 # delete (обработчик действия)
 # @user_passes_test(lambda u: u.is_staff)
