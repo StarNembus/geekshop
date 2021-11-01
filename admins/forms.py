@@ -4,6 +4,7 @@ from users.forms import UserRegistrationForm, UserProfileForm
 from users.models import User
 from products.models import ProductCategory
 from django.forms import ModelForm
+from products.models import Product
 
 
 class UserAdminRegistrationForm(UserRegistrationForm):
@@ -23,3 +24,10 @@ class AdminProductCategory(ModelForm):
     class Meta:
         model = ProductCategory
         fields = ('name', 'description')
+
+
+class AdminProduct(ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+

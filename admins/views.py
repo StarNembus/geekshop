@@ -8,6 +8,8 @@ from products.models import ProductCategory
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test
+from admins.forms import AdminProduct
+from products.models import Product
 
 
 @user_passes_test(lambda u: u.is_staff)  # ограничение для входа в админку
@@ -119,3 +121,26 @@ def admin_products_category(request):
         'category': category,
     }
     return render(request, 'admins/admin_products_category.html', context)
+
+
+class AdminProductListView(ListView):
+    model = Product
+    template_name = 'admins/product_read.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminProductListView, self).get_context_data(**kwargs)
+        context['select_product'] = Product.objects.all()
+        return context
+
+
+# def admins_product(request):
+#     select_product = Product.objects.all()
+#     context = {
+#         'title': 'GeekShop - Product',
+#         'select_product': select_product,
+#     }
+#     return render(request, 'admins/product_read.html', context)
+
+
+def product_create(request):
+    pass
