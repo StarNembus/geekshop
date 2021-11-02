@@ -22,10 +22,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for product in select_product %}
+                                {% for product in object_list %}
                                     <tr>
                                         <td>
-                                            <a href="{% url 'admins:admins_product' %}" style="color: dodgerblue">{{ product.name}}
+                                            <a href="{% url 'admins:product_update' product.id %}"
+                                               style="color: dodgerblue">{{ product.name }}
                                             </a>
                                         </td>
                                         <td>{{ product.price}}</td>

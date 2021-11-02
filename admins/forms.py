@@ -45,3 +45,17 @@ class AdminProductCreate(ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.help_text = ''
+
+
+class AdminProductUpdate(ModelForm):
+    image = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
+
+    class Meta:
+        model = Product
+        fields = ('name', 'price', 'image', 'description', 'category', 'quantity')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.help_text = ''

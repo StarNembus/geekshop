@@ -8,7 +8,7 @@ from products.models import ProductCategory
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test
-from admins.forms import AdminProductCreate
+from admins.forms import AdminProductCreate, AdminProductUpdate
 from products.models import Product
 
 
@@ -106,6 +106,7 @@ class UserDeleteView(DeleteView):
         self.object.safe_delete()
         return HttpResponseRedirect(success_url)
 
+
 # delete (обработчик действия)
 # @user_passes_test(lambda u: u.is_staff)
 # def admin_users_delete(request, id):
@@ -133,16 +134,26 @@ class AdminProductListView(ListView):
         return context
 
 
-# def admins_product(request):
-#     select_product = Product.objects.all()
-#     context = {
-#         'title': 'GeekShop - Product',
-#         'select_product': select_product,
-#     }
-#     return render(request, 'admins/product_read.html', context)
-
 class AdminProductCreateView(CreateView):
     model = Product
     template_name = 'admins/product_create.html'
     form_class = AdminProductCreate
+    success_url = reverse_lazy('admins:admins_product')
+
+
+class AdminProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'admins/product_update_delete.html'
+    form_class = AdminProductUpdate
+    success_url = reverse_lazy('admins:admins_product')
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminProductUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Админ-панель - Редактирование товара'
+        return context
+
+
+class AdminProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'admins/product_update_delete.html'
     success_url = reverse_lazy('admins:admins_product')
