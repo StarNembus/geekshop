@@ -8,7 +8,7 @@ from products.models import ProductCategory
 from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test
-from admins.forms import AdminProduct
+from admins.forms import AdminProductCreate
 from products.models import Product
 
 
@@ -141,6 +141,8 @@ class AdminProductListView(ListView):
 #     }
 #     return render(request, 'admins/product_read.html', context)
 
-
-def product_create(request):
-    pass
+class AdminProductCreateView(CreateView):
+    model = Product
+    template_name = 'admins/product_create.html'
+    form_class = AdminProductCreate
+    success_url = reverse_lazy('admins:admins_product')
