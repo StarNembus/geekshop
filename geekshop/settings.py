@@ -134,14 +134,15 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User' # базовая модель для работы с пользователем (название приложения.название модели)
+AUTH_USER_MODEL = 'users.User'  # базовая модель для работы с пользователем (название приложения.название модели)
 
 LOGIN_URL = '/users/login/'  # использует декоратор @login_required
 
-DOMAIN_NAME = 'http/localhost:8000'
+DOMAIN_NAME = 'http://localhost:8000'
 
 
 EMAIL_HOST = 'smtp.mailtrap.io'
 EMAIL_HOST_USER = '5713e3aa401ac2'
 EMAIL_HOST_PASSWORD = '1466ccf9a5bc91'
 EMAIL_PORT = '2525'
+
