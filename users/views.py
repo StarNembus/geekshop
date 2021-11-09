@@ -12,6 +12,8 @@ from django.views.generic.edit import FormView
 from django.core.mail import send_mail
 from django.conf import settings
 from users.models import User
+from django.db import transaction
+from users.forms import UserProfileEditForm
 
 
 # class UserFormView(FormView):
@@ -66,10 +68,32 @@ def verify(request, email, activation_key):
             return render(request, 'users/verification.html')
         else:
             print(f'error activation user: {user}')
-            return request, 'users/verification.html'
+            return render(request, 'users/verification.html')
     except Exception as e:
         print(f'error activation user : {e.args}')
         return HttpResponseRedirect(reverse('index'))
+
+
+@transaction.atomic
+def edit(request):
+    title = 'редактирование'
+    if request.method == 'POST':
+        edit_form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        profile_form = UserProfileEditForm(request.POST, instance=request.user.userprofile)
+
+        if edit_form.is_valid() and profile_form.is_valid():
+            edit_form.save()
+            return HttpResponseRedirect(reverse(''))
+    else:
+        edit_form = UserProfileForm(instance=request.user)
+        profile_form = UserProfileEditForm(instance=request.user.userprofile)
+
+    context = {
+        'title': title,
+        'edit_form': edit_form,
+        'profile_form': profile_form,
+    }
+    return render(request, 'users/profile.html', context)
 
 
 @login_required  # добавление логики для функции  (в части работы с неавторизованным пользователем))
@@ -94,6 +118,8 @@ def profile(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+
 
 # def registration(request):
 #     if request.method == 'POST':
