@@ -83,7 +83,7 @@ def edit(request):
 
         if edit_form.is_valid() and profile_form.is_valid():
             edit_form.save()
-            return HttpResponseRedirect(reverse(''))
+            return HttpResponseRedirect(reverse('auth:edit'))
     else:
         edit_form = UserProfileForm(instance=request.user)
         profile_form = UserProfileEditForm(instance=request.user.userprofile)
@@ -118,7 +118,6 @@ def profile(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
-
 
 
 # def registration(request):

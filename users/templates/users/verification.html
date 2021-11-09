@@ -1,10 +1,11 @@
 {% extends 'users/base.html' %}
 
+
 {% block content %}
 
   {% if user %}
 <br>
-    <h4>Пользователь {{form.username}} подтвержден <h3>Поздравляем!</h3></h4>
+    <h4>Пользователь {{ form.username }} подтвержден <h3>Поздравляем!</h3></h4>
   {% else %}
     <h3>Верификация не пройдена.</h3>
   {% endif %}
