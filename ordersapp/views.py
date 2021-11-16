@@ -83,7 +83,6 @@ class OrderUpdate(UpdateView):
                 if form.instance.pk:
                     form.initial['price'] = form.instance.product.price
         context['orderitems'] = formset
-
         return context
 
     def form_valid(self, form):
@@ -121,18 +120,18 @@ def order_forming_complete(request, pk):
     return HttpResponseRedirect(reverse('ordersapp:orders_list'))
 
 
-@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save, sender=OrderItem)  # событие перед записью объекта, встроенный сигнал Django
 @receiver(pre_save, sender=Basket)
-def product_quantity_update_save(sender, update_fields, instance, **kwargs):
-    if update_fields is 'quantity' or 'product':
-        if instance.pk:
+def product_quantity_update_save(sender, update_fields, instance, **kwargs): # «sender» - класс модели, экземпляр которой будет сохранен
+    if update_fields is 'quantity' or 'product':  # «update_fields» - имена обновляемых полей
+        if instance.pk:  # «instance» - сам обновляемый объект, проверяем, новый это объект или уже существующий, при помощи условия
             instance.product.quantity -= instance.quantity - sender.get_item(instance.pk).quantity
         else:
             instance.product.quantity -= instance.quantity
         instance.product.save()
 
 
-@receiver(pre_delete, sender=OrderItem)
+@receiver(pre_delete, sender=OrderItem)  # событие перед удалением объекта
 @receiver(pre_delete, sender=Basket)
 def product_quantity_update_delete(sender, instance, **kwargs):
     instance.product.quantity += instance.quantity
