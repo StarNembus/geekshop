@@ -116,10 +116,10 @@ class UserDeleteView(DeleteView):
 
 
 def admin_products_category(request):
-    category = ProductCategory.objects.all()
+    categories = ProductCategory.objects.all()
     context = {
         'title': 'GeekShop - Category',
-        'category': category,
+        'categories': categories,
     }
     return render(request, 'admins/admin_products_category.html', context)
 
