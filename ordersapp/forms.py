@@ -14,6 +14,8 @@ class OrderForm(forms.ModelForm):
 
 
 class OrderItemForm(forms.ModelForm):
+    price = forms.CharField(label='цена', required=False)  # Добавляем поле «price» к форме элемента заказа
+
     class Meta:
         model = OrderItem
         exclude = ()
