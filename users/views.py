@@ -93,7 +93,7 @@ def edit(request):
         'edit_form': edit_form,
         'profile_form': profile_form,
     }
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/edit.html', context)
 
 
 @login_required  # добавление логики для функции  (в части работы с неавторизованным пользователем))
