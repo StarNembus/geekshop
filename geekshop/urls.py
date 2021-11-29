@@ -30,5 +30,11 @@ urlpatterns = [
     path('', include('social_django.urls', namespace='social')),
 ]
 
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [path('__debug', include(debug_toolbar.urls))]
+
+
 if settings.DEBUG:  # проверка (локально или нет)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -33,7 +33,7 @@ class Order(models.Model):
     is_active = models.BooleanField(verbose_name='аткивен', default=True)
 
     class Meta:
-        ordering = ('-created', )  #  сортировка по умолчанию от более новых к старым заказам
+        ordering = ('-created',)  # сортировка по умолчанию от более новых к старым заказам
         verbose_name = 'заказ'
         verbose_name_plural = 'заказы'
 
@@ -42,7 +42,8 @@ class Order(models.Model):
 
     def get_total_quantity(self):
         items = self.orderitems.select_related()
-        return sum(list(map(lambda x: x.quantity, items)))  #  функция map() дает возможность применить функцию к каждому элементу итерируемого объекта.
+        return sum(list(map(lambda x: x.quantity,
+                            items)))  # функция map() дает возможность применить функцию к каждому элементу итерируемого объекта.
 
     def get_product_type_quantity(self):
         items = self.orderitems.select_related()  # находим все элементы заказа
@@ -60,8 +61,6 @@ class Order(models.Model):
 
         self.is_active = False
         self.save()
-
-        
 
 
 class OrderItem(models.Model):
