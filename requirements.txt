@@ -19,3 +19,7 @@ social-auth-core==4.1.0
 sqlparse==0.4.2
 urllib3==1.26.7
 psycopg2-binary==2.9.2
+pydotplus
+pyparsing
+django-debug-toolbar~=3.2.2
+locust~=2.5.0
