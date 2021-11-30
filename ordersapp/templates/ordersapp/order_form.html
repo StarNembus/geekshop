@@ -1,5 +1,6 @@
 {% extends "products/base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block js %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -34,9 +35,9 @@
                                <thead>
                                <tr>
                                    {% for field in form.visible_fields %}
-                                       <th class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
+                                       <td class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
                                            {{ field.label|capfirst }}
-                                       </th>
+                                       </td>
                                    {% endfor %}
                                </tr>
                                </thead>
@@ -51,7 +52,14 @@
                                        {% endif %}
                                         {{ field.errors.as_ul }}
                                    {% if field.name != 'price' %}
-                                       {{ field }}
+{#                                       {{ field }}#}
+                                       {% if field.name == 'product' %}
+                                           {% cache 3600 orderitem_form_product field.value %}
+                                                {{ field }}
+                                           {% endcache %}
+                                       {% else %}
+                                           {{ field }}
+                                       {% endif %}
                                    {% else %}
                                        {% if field.value %}
                                             <span class="orderitems-{{ forloop.parentloop.counter0 }}-price">

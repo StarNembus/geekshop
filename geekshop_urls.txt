@@ -1,8 +1,8 @@
-http://194.67.86.78/
-http://194.67.86.78/products/
-http://194.67.86.78/products/category/1/
-http://194.67.86.78/products/category/2/
-http://194.67.86.78//products/category/3/
-http:///94.67.86.78/products/category/4/
-http://194.67.86.78/order/
+http://127.0.0.1:8000/
+http://127.0.0.1:8000/products/
+http://127.0.0.1:8000products/category/1/
+http://127.0.0.1:8000/products/category/2/
+http://127.0.0.1:8000/products/category/3/
+http://127.0.0.1:8000/products/category/4/
+
 
