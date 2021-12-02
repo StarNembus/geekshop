@@ -33,7 +33,6 @@ class AdminProduct(ModelForm):
 
 
 class AdminProductCreate(ModelForm):
-
     image = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
 
     class Meta:
@@ -59,3 +58,17 @@ class AdminProductUpdate(ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.help_text = ''
+
+
+class AdminProductEditForm(forms.ModelForm):
+    discount = forms.IntegerField(label='скидка', required=False, min_value=0, max_value=90, initial=0)
+
+    class Meta:
+        model = Product
+        # fields = '__all__'
+        exclude = ()
+
+    def __init__(self, *args, **kwargs):
+        super(AdminProductEditForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'

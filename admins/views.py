@@ -1,3 +1,4 @@
+from django.db.models import F
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
@@ -5,11 +6,14 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from users.models import User
 from products.models import ProductCategory
-from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory
+from admins.forms import UserAdminRegistrationForm, UserAdminProfileForm, AdminProductCategory, AdminProductEditForm
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test
 from admins.forms import AdminProductCreate, AdminProductUpdate
 from products.models import Product
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
+from django.db import connection
 
 
 @user_passes_test(lambda u: u.is_staff)  # ограничение для входа в админку
@@ -124,6 +128,23 @@ def admin_products_category(request):
     return render(request, 'admins/admin_products_category.html', context)
 
 
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}:')
+    [print(query['sql']) for query in update_queries]
+
+
+# @receiver(pre_save, sender=ProductCategory)
+# def product_is_active_update_productcategory_save(sender, instance, **kwargs):
+#     if instance.pk:
+#         if instance.is_active:
+#             instance.product_set.update(is_active=True)
+#         else:
+#             instance.product_set.update(is_active=False)
+#
+#         db_profile_by_type(sender, 'UPDATE', connection.queries)
+
+
 class AdminProductListView(ListView):
     model = Product
     template_name = 'admins/product_read.html'
@@ -144,13 +165,22 @@ class AdminProductCreateView(CreateView):
 class AdminProductUpdateView(UpdateView):
     model = Product
     template_name = 'admins/product_update_delete.html'
-    form_class = AdminProductUpdate
+    # form_class = AdminProductUpdate
+    form_class = AdminProductEditForm
     success_url = reverse_lazy('admins:admins_product')
 
     def get_context_data(self, **kwargs):
         context = super(AdminProductUpdateView, self).get_context_data(**kwargs)
         context['title'] = 'Админ-панель - Редактирование товара'
         return context
+
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                self.object.product_set.update(price=F('price') * (1 - discount / 100))
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
+        return super().form_valid(form)
 
 
 class AdminProductDeleteView(DeleteView):
